@@ -7,7 +7,7 @@ module MsteamsNotifier
 
     # A quick method to send a text notification
     def self.quick_message(message)
-      notifier = MsteamsNotifier.new
+      notifier = MsteamsNotifier::Message.new
       notifier.add_text(message)
       notifier.send
     end
