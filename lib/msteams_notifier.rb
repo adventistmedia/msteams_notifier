@@ -1,5 +1,6 @@
 require "msteams_notifier/version"
 require "net/http"
+
 module MsteamsNotifier
   class Error < StandardError; end
 
@@ -64,6 +65,7 @@ module MsteamsNotifier
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
         request = Net::HTTP::Post.new(uri.request_uri)
+        request["Content-Type"] = "application/json"
         request.body = json_payload
         response = http.request(request)
         response.is_a?(Net::HTTPSuccess)

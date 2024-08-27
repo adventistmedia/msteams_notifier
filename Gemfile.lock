@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    msteams_notifier (0.1.0)
+    msteams_notifier (0.1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -13,7 +13,7 @@ PLATFORMS
 
 DEPENDENCIES
   msteams_notifier!
-  rake (~> 12.0)
+  rake (>= 12.0)
 
 BUNDLED WITH
    2.1.4
