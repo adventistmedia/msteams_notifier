@@ -1,21 +1,29 @@
 require "msteams_notifier/version"
 require "net/http"
+require "json"
 
 module MsteamsNotifier
   class Error < StandardError; end
 
   class Message
 
+    attr_accessor :enabled, :webhook_url, :quick_title
+
     # A quick method to send a text notification
     def self.quick_message(message)
       notifier = MsteamsNotifier::Message.new
+      if !notifier.quick_title.nil? && !notifier.quick_title != ""
+        notifier.add_title notifier.quick_title
+      end
       notifier.add_text(message)
+      
       notifier.send
     end
 
   	def initialize(options={})
       @enabled = options[:enabled] || (defined?(Rails) ? Rails.application.credentials.dig(:ms_teams, :enabled).to_s == "1" : true)
-      @webhook_url = options[:webhook_url] || (defined?(Rails) ? Rails.application.credentials.dig(:ms_teams, :webhook_url) : '')
+      @webhook_url = options[:webhook_url] || (defined?(Rails) ? Rails.application.credentials.dig(:ms_teams, :webhook_url) : "")
+      @quick_title = options[:quick_title] || (defined?(Rails) ? Rails.application.credentials.dig(:ms_teams, :quick_title) : nil)
       @items = []
       @actions = []
   	end
@@ -69,7 +77,9 @@ module MsteamsNotifier
         request.body = json_payload
         response = http.request(request)
         response.is_a?(Net::HTTPSuccess)
-      rescue
+      rescue => e
+        puts e.message
+        puts e.backtrace
         false
       end
   	end
